@@ -7,26 +7,22 @@ package io.enmasse.systemtest.shared.brokered.web;
 import io.enmasse.address.model.AddressBuilder;
 import io.enmasse.systemtest.UserCredentials;
 import io.enmasse.systemtest.bases.shared.ITestSharedBrokered;
-import io.enmasse.systemtest.bases.web.WebConsoleTest;
+import io.enmasse.systemtest.bases.web.ConsoleTest;
 import io.enmasse.systemtest.messagingclients.ExternalClients;
 import io.enmasse.systemtest.model.address.AddressType;
-import io.enmasse.systemtest.selenium.SeleniumChrome;
+import io.enmasse.systemtest.selenium.SeleniumFirefox;
 import io.enmasse.systemtest.utils.AddressUtils;
 import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import static io.enmasse.systemtest.TestTag.NON_PR;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@Tag(NON_PR)
-@SeleniumChrome
-@Disabled("Ignore whilst 0.31 console refactoring is underway")
-class ChromeWebConsoleTest extends WebConsoleTest implements ITestSharedBrokered {
+@SeleniumFirefox
+class FirefoxConsoleTest extends ConsoleTest implements ITestSharedBrokered {
 
     @Test
     void testCreateDeleteQueue() throws Exception {
-        doTestCreateDeleteAddress(new AddressBuilder()
+        doTestCreateDeleteAddress(getSharedAddressSpace(), new AddressBuilder()
                 .withNewMetadata()
                 .withNamespace(getSharedAddressSpace().getMetadata().getNamespace())
                 .withName(AddressUtils.generateAddressMetadataName(getSharedAddressSpace(), "test-queue"))
@@ -39,10 +35,10 @@ class ChromeWebConsoleTest extends WebConsoleTest implements ITestSharedBrokered
                 .build());
     }
 
+
     @Test
-    @Disabled("Only few chrome tests are enabled, rest functionality is covered by firefox")
     void testCreateDeleteTopic() throws Exception {
-        doTestCreateDeleteAddress(new AddressBuilder()
+        doTestCreateDeleteAddress(getSharedAddressSpace(), new AddressBuilder()
                 .withNewMetadata()
                 .withNamespace(getSharedAddressSpace().getMetadata().getNamespace())
                 .withName(AddressUtils.generateAddressMetadataName(getSharedAddressSpace(), "test-topic"))
@@ -56,7 +52,17 @@ class ChromeWebConsoleTest extends WebConsoleTest implements ITestSharedBrokered
     }
 
     @Test
-    @Disabled("Only few chrome tests are enabled, rest functionality is covered by firefox")
+    void testFilterAddressesByType() throws Exception {
+        doTestFilterAddressesByType(getSharedAddressSpace());
+    }
+
+    @Test
+    void testFilterAddressesByName() throws Exception {
+        doTestFilterAddressesByName(getSharedAddressSpace());
+    }
+
+    /**
+    @Test
     void testPurgeAddress() throws Exception {
         doTestPurgeMessages(new AddressBuilder()
                 .withNewMetadata()
@@ -72,30 +78,16 @@ class ChromeWebConsoleTest extends WebConsoleTest implements ITestSharedBrokered
     }
 
     @Test
-    void testFilterAddressesByType() throws Exception {
-        doTestFilterAddressesByType();
-    }
-
-    @Test
-    @Disabled("Only few chrome tests are enabled, rest functionality is covered by firefox")
-    void testFilterAddressesByName() throws Exception {
-        doTestFilterAddressesByName();
-    }
-
-    @Test
-    @Disabled("Only few chrome tests are enabled, rest functionality is covered by firefox")
     void testDeleteFilteredAddress() throws Exception {
         doTestDeleteFilteredAddress();
     }
 
     @Test
-    @Disabled("Only few chrome tests are enabled, rest functionality is covered by firefox")
     void testFilterAddressWithRegexSymbols() throws Exception {
         doTestFilterAddressWithRegexSymbols();
     }
 
     @Test
-    @Disabled("Only few chrome tests are enabled, rest functionality is covered by firefox")
     void testRegexAlertBehavesConsistently() throws Exception {
         doTestRegexAlertBehavesConsistently();
     }
@@ -107,69 +99,69 @@ class ChromeWebConsoleTest extends WebConsoleTest implements ITestSharedBrokered
 
     @Test
     @ExternalClients
-    @Disabled("Only few chrome tests are enabled, rest functionality is covered by firefox")
+    void testSortAddressesByClients() throws Exception {
+        doTestSortAddressesByClients();
+    }
+
+    @Test
+    @ExternalClients
     void testSortConnectionsBySenders() throws Exception {
         doTestSortConnectionsBySenders();
     }
 
     @Test
     @ExternalClients
-    @Disabled("Only few chrome tests are enabled, rest functionality is covered by firefox")
     void testSortConnectionsByReceivers() throws Exception {
         doTestSortConnectionsByReceivers();
     }
 
     @Test
     @ExternalClients
-    @Disabled("Only few chrome tests are enabled, rest functionality is covered by firefox")
+    @Disabled("disabled due to #669")
     void testFilterConnectionsByEncrypted() throws Exception {
         doTestFilterConnectionsByEncrypted();
     }
 
     @Test
     @ExternalClients
-    @Disabled("Only few chrome tests are enabled, rest functionality is covered by firefox")
     void testFilterConnectionsByUser() throws Exception {
         doTestFilterConnectionsByUser();
     }
 
     @Test
     @ExternalClients
-    @Disabled("Only few chrome tests are enabled, rest functionality is covered by firefox")
     void testFilterConnectionsByHostname() throws Exception {
         doTestFilterConnectionsByHostname();
     }
 
     @Test
     @ExternalClients
-    @Disabled("Only few chrome tests are enabled, rest functionality is covered by firefox")
     void testSortConnectionsByHostname() throws Exception {
         doTestSortConnectionsByHostname();
     }
 
     @Test
     @ExternalClients
-    @Disabled("Only few chrome tests are enabled, rest functionality is covered by firefox")
+    @Disabled("disabled due to https://github.com/EnMasseProject/enmasse/issues/634")
     void testFilterConnectionsByContainerId() throws Exception {
         doTestFilterConnectionsByContainerId();
     }
 
     @Test
     @ExternalClients
-    @Disabled("Only few chrome tests are enabled, rest functionality is covered by firefox")
+    @Disabled("disabled due to https://github.com/EnMasseProject/enmasse/issues/634")
     void testSortConnectionsByContainerId() throws Exception {
         doTestSortConnectionsByContainerId();
     }
 
     @Test
-    @Disabled("Only few chrome tests are enabled, rest functionality is covered by firefox")
     void testMessagesMetrics() throws Exception {
         doTestMessagesMetrics();
     }
 
     @Test
     @ExternalClients
-    @Disabled("Only few chrome tests are enabled, rest functionality is covered by firefox")
+    @Disabled("disabled due to #649")
     void testClientsMetrics() throws Exception {
         doTestClientsMetrics();
     }
@@ -177,27 +169,53 @@ class ChromeWebConsoleTest extends WebConsoleTest implements ITestSharedBrokered
     @Test()
     void testCannotOpenConsolePage() {
         assertThrows(IllegalAccessException.class,
-                () -> doTestCanOpenConsolePage(new UserCredentials("nonexistsUser", "pepaPa555"), false));
+                () -> doTestCanOpenConsolePage(new UserCredentials("noexistuser", "pepaPa555"), false));
     }
 
     @Test
-    @Disabled("Only few chrome tests are enabled, rest functionality is covered by firefox")
     void testCanOpenConsolePage() throws Exception {
         doTestCanOpenConsolePage(clusterUser, true);
     }
 
     @Test
-    @Disabled("Only few chrome tests are enabled, rest functionality is covered by firefox")
+    void testAddressStatus() throws Exception {
+        doTestAddressStatus(new AddressBuilder()
+                .withNewMetadata()
+                .withNamespace(getSharedAddressSpace().getMetadata().getNamespace())
+                .withName(AddressUtils.generateAddressMetadataName(getSharedAddressSpace(), "test-queue"))
+                .endMetadata()
+                .withNewSpec()
+                .withType("queue")
+                .withAddress("test-queue")
+                .withPlan(getDefaultPlan(AddressType.QUEUE))
+                .endSpec()
+                .build());
+        doTestAddressStatus(new AddressBuilder()
+                .withNewMetadata()
+                .withNamespace(getSharedAddressSpace().getMetadata().getNamespace())
+                .withName(AddressUtils.generateAddressMetadataName(getSharedAddressSpace(), "test-topic"))
+                .endMetadata()
+                .withNewSpec()
+                .withType("queue")
+                .withAddress("test-topic")
+                .withPlan(getDefaultPlan(AddressType.QUEUE))
+                .endSpec()
+                .build());
+    }
+
+    @Test
     void testCreateAddressWithSpecialCharsShowsErrorMessage() throws Exception {
         doTestCreateAddressWithSpecialCharsShowsErrorMessage();
     }
 
     @Test
-    @Disabled("Only a few chrome tests are enabled, rest of functionality is covered by firefox")
+    @Disabled("disabled while sdavey changes it with changes to regex in addr names")
+        //TODO(sdavey)
     void testCreateAddressWithSymbolsAt61stCharIndex() throws Exception {
         doTestCreateAddressWithSymbolsAt61stCharIndex(
                 new AddressBuilder()
                         .withNewMetadata()
+                        .withNamespace(getSharedAddressSpace().getMetadata().getNamespace())
                         .withName(AddressUtils.generateAddressMetadataName(getSharedAddressSpace(), "queue10charhere-10charhere-10charhere-10charhere-10charhere-1"))
                         .endMetadata()
                         .withNewSpec()
@@ -208,6 +226,7 @@ class ChromeWebConsoleTest extends WebConsoleTest implements ITestSharedBrokered
                         .build(),
                 new AddressBuilder()
                         .withNewMetadata()
+                        .withNamespace(getSharedAddressSpace().getMetadata().getNamespace())
                         .withName(AddressUtils.generateAddressMetadataName(getSharedAddressSpace(), "queue10charhere-10charhere-10charhere-10charhere-10charhere.1"))
                         .endMetadata()
                         .withNewSpec()
@@ -219,8 +238,8 @@ class ChromeWebConsoleTest extends WebConsoleTest implements ITestSharedBrokered
     }
 
     @Test
-    @Disabled("Only a few chrome tests are enabled, rest of functionality is covered by firefox")
     void testAddressWithValidPlanOnly() throws Exception {
         doTestAddressWithValidPlanOnly();
     }
+    **/
 }

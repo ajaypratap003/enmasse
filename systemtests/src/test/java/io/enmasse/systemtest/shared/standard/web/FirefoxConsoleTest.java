@@ -5,37 +5,20 @@
 package io.enmasse.systemtest.shared.standard.web;
 
 import io.enmasse.address.model.AddressBuilder;
-import io.enmasse.systemtest.UserCredentials;
 import io.enmasse.systemtest.bases.shared.ITestSharedStandard;
-import io.enmasse.systemtest.bases.web.WebConsoleTest;
-import io.enmasse.systemtest.messagingclients.ExternalClients;
+import io.enmasse.systemtest.bases.web.ConsoleTest;
 import io.enmasse.systemtest.model.address.AddressType;
 import io.enmasse.systemtest.model.addressplan.DestinationPlan;
 import io.enmasse.systemtest.selenium.SeleniumFirefox;
 import io.enmasse.systemtest.utils.AddressUtils;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 @SeleniumFirefox
-@Disabled("Ignore whilst 0.31 console refactoring is underway")
-public class FirefoxWebConsoleTest extends WebConsoleTest implements ITestSharedStandard {
+public class FirefoxConsoleTest extends ConsoleTest implements ITestSharedStandard {
 
     @Test
     void testCreateDeleteQueue() throws Exception {
-        doTestCreateDeleteAddress(
-                new AddressBuilder()
-                        .withNewMetadata()
-                        .withNamespace(getSharedAddressSpace().getMetadata().getNamespace())
-                        .withName(AddressUtils.generateAddressMetadataName(getSharedAddressSpace(), "test-queue"))
-                        .endMetadata()
-                        .withNewSpec()
-                        .withType("queue")
-                        .withAddress("test-queue")
-                        .withPlan(DestinationPlan.STANDARD_LARGE_QUEUE)
-                        .endSpec()
-                        .build(),
+        doTestCreateDeleteAddress(getSharedAddressSpace(),
                 new AddressBuilder()
                         .withNewMetadata()
                         .withNamespace(getSharedAddressSpace().getMetadata().getNamespace())
@@ -46,12 +29,24 @@ public class FirefoxWebConsoleTest extends WebConsoleTest implements ITestShared
                         .withAddress("test-queue2")
                         .withPlan(DestinationPlan.STANDARD_SMALL_QUEUE)
                         .endSpec()
+                        .build(),
+                new AddressBuilder()
+                        .withNewMetadata()
+                        .withNamespace(getSharedAddressSpace().getMetadata().getNamespace())
+                        .withName(AddressUtils.generateAddressMetadataName(getSharedAddressSpace(), "test-queue"))
+                        .endMetadata()
+                        .withNewSpec()
+                        .withType("queue")
+                        .withAddress("test-queue")
+                        .withPlan(DestinationPlan.STANDARD_LARGE_QUEUE)
+                        .endSpec()
                         .build());
     }
 
+
     @Test
     void testCreateDeleteTopic() throws Exception {
-        doTestCreateDeleteAddress(
+        doTestCreateDeleteAddress(getSharedAddressSpace(),
                 new AddressBuilder()
                         .withNewMetadata()
                         .withNamespace(getSharedAddressSpace().getMetadata().getNamespace())
@@ -74,37 +69,11 @@ public class FirefoxWebConsoleTest extends WebConsoleTest implements ITestShared
                         .withPlan(DestinationPlan.STANDARD_SMALL_TOPIC)
                         .endSpec()
                         .build());
-    }
-
-    @Test
-    void testPurgeAddress() throws Exception {
-        doTestPurgeMessages(new AddressBuilder()
-                .withNewMetadata()
-                .withNamespace(getSharedAddressSpace().getMetadata().getNamespace())
-                .withName(AddressUtils.generateAddressMetadataName(getSharedAddressSpace(), "purge-queue"))
-                .endMetadata()
-                .withNewSpec()
-                .withType("queue")
-                .withAddress("purge-queue")
-                .withPlan(getDefaultPlan(AddressType.QUEUE))
-                .endSpec()
-                .build());
-        doTestPurgeMessages(new AddressBuilder()
-                .withNewMetadata()
-                .withNamespace(getSharedAddressSpace().getMetadata().getNamespace())
-                .withName(AddressUtils.generateAddressMetadataName(getSharedAddressSpace(), "purge-queue-sharded"))
-                .endMetadata()
-                .withNewSpec()
-                .withType("queue")
-                .withAddress("purge-queue-sharded")
-                .withPlan(DestinationPlan.STANDARD_XLARGE_QUEUE)
-                .endSpec()
-                .build());
     }
 
     @Test
     void testCreateDeleteDurableSubscription() throws Exception {
-        doTestCreateDeleteDurableSubscription(
+     doTestCreateDeleteAddress(getSharedAddressSpace(),
                 new AddressBuilder()
                         .withNewMetadata()
                         .withNamespace(getSharedAddressSpace().getMetadata().getNamespace())
@@ -119,19 +88,20 @@ public class FirefoxWebConsoleTest extends WebConsoleTest implements ITestShared
                 new AddressBuilder()
                         .withNewMetadata()
                         .withNamespace(getSharedAddressSpace().getMetadata().getNamespace())
-                        .withName(AddressUtils.generateAddressMetadataName(getSharedAddressSpace(), "test-topic2"))
+                        .withName(AddressUtils.generateAddressMetadataName(getSharedAddressSpace(), "test-sub"))
                         .endMetadata()
                         .withNewSpec()
-                        .withType("topic")
-                        .withAddress("test-topic2")
-                        .withPlan(DestinationPlan.STANDARD_SMALL_TOPIC)
+                        .withType("subscription")
+                        .withAddress("test-sub")
+                        .withTopic("test-topic")
+                        .withPlan(DestinationPlan.STANDARD_LARGE_SUBSCRIPTION)
                         .endSpec()
                         .build());
     }
 
     @Test
     void testCreateDeleteAnycast() throws Exception {
-        doTestCreateDeleteAddress(new AddressBuilder()
+        doTestCreateDeleteAddress(getSharedAddressSpace(), new AddressBuilder()
                 .withNewMetadata()
                 .withNamespace(getSharedAddressSpace().getMetadata().getNamespace())
                 .withName(AddressUtils.generateAddressMetadataName(getSharedAddressSpace(), "test-anycast"))
@@ -146,7 +116,55 @@ public class FirefoxWebConsoleTest extends WebConsoleTest implements ITestShared
 
     @Test
     void testCreateDeleteMulticast() throws Exception {
-        doTestCreateDeleteAddress(new AddressBuilder()
+        doTestCreateDeleteAddress(getSharedAddressSpace(), new AddressBuilder()
+                .withNewMetadata()
+                .withNamespace(getSharedAddressSpace().getMetadata().getNamespace())
+                .withName(AddressUtils.generateAddressMetadataName(getSharedAddressSpace(), "test-multicast"))
+                .endMetadata()
+                .withNewSpec()
+                .withType("multicast")
+                .withAddress("test-multicast")
+                .withPlan(DestinationPlan.STANDARD_SMALL_MULTICAST)
+                .endSpec()
+                .build());
+    }
+
+    @Test
+    void testAddressStatus() throws Exception {
+        doTestAddressStatus(getSharedAddressSpace(), new AddressBuilder()
+                .withNewMetadata()
+                .withNamespace(getSharedAddressSpace().getMetadata().getNamespace())
+                .withName(AddressUtils.generateAddressMetadataName(getSharedAddressSpace(), "test-queue"))
+                .endMetadata()
+                .withNewSpec()
+                .withType("queue")
+                .withAddress("test-queue")
+                .withPlan(getDefaultPlan(AddressType.QUEUE))
+                .endSpec()
+                .build());
+        doTestAddressStatus(getSharedAddressSpace(), new AddressBuilder()
+                .withNewMetadata()
+                .withNamespace(getSharedAddressSpace().getMetadata().getNamespace())
+                .withName(AddressUtils.generateAddressMetadataName(getSharedAddressSpace(), "test-topic"))
+                .endMetadata()
+                .withNewSpec()
+                .withType("queue")
+                .withAddress("test-topic")
+                .withPlan(getDefaultPlan(AddressType.QUEUE))
+                .endSpec()
+                .build());
+        doTestAddressStatus(getSharedAddressSpace(), new AddressBuilder()
+                .withNewMetadata()
+                .withNamespace(getSharedAddressSpace().getMetadata().getNamespace())
+                .withName(AddressUtils.generateAddressMetadataName(getSharedAddressSpace(), "test-anycast"))
+                .endMetadata()
+                .withNewSpec()
+                .withType("anycast")
+                .withAddress("test-anycast")
+                .withPlan(DestinationPlan.STANDARD_SMALL_ANYCAST)
+                .endSpec()
+                .build());
+        doTestAddressStatus(getSharedAddressSpace(), new AddressBuilder()
                 .withNewMetadata()
                 .withNamespace(getSharedAddressSpace().getMetadata().getNamespace())
                 .withName(AddressUtils.generateAddressMetadataName(getSharedAddressSpace(), "test-multicast"))
@@ -161,13 +179,49 @@ public class FirefoxWebConsoleTest extends WebConsoleTest implements ITestShared
 
     @Test
     void testFilterAddressesByType() throws Exception {
-        doTestFilterAddressesByType();
+        doTestFilterAddressesByType(getSharedAddressSpace());
     }
 
     @Test
     void testFilterAddressesByName() throws Exception {
-        doTestFilterAddressesByName();
+        doTestFilterAddressesByName(getSharedAddressSpace());
     }
+
+    @Test
+    void testFilterAddressesByStatus() throws Exception {
+        doTestFilterAddressesByStatus(getSharedAddressSpace());
+    }
+
+ /**
+  @Test
+  void testPurgeAddress() throws Exception {
+  doTestPurgeMessages(new AddressBuilder()
+  .withNewMetadata()
+  .withNamespace(getSharedAddressSpace().getMetadata().getNamespace())
+  .withName(AddressUtils.generateAddressMetadataName(getSharedAddressSpace(), "purge-queue"))
+  .endMetadata()
+  .withNewSpec()
+  .withType("queue")
+  .withAddress("purge-queue")
+  .withPlan(getDefaultPlan(AddressType.QUEUE))
+  .endSpec()
+  .build());
+  doTestPurgeMessages(new AddressBuilder()
+  .withNewMetadata()
+  .withNamespace(getSharedAddressSpace().getMetadata().getNamespace())
+  .withName(AddressUtils.generateAddressMetadataName(getSharedAddressSpace(), "purge-queue-sharded"))
+  .endMetadata()
+  .withNewSpec()
+  .withType("queue")
+  .withAddress("purge-queue-sharded")
+  .withPlan(DestinationPlan.STANDARD_XLARGE_QUEUE)
+  .endSpec()
+  .build());
+  }
+
+  **/
+
+    /**
 
     @Test
     void testDeleteFilteredAddress() throws Exception {
@@ -268,54 +322,6 @@ public class FirefoxWebConsoleTest extends WebConsoleTest implements ITestShared
     }
 
     @Test
-    void testAddressStatus() throws Exception {
-        doTestAddressStatus(new AddressBuilder()
-                .withNewMetadata()
-                .withNamespace(getSharedAddressSpace().getMetadata().getNamespace())
-                .withName(AddressUtils.generateAddressMetadataName(getSharedAddressSpace(), "test-queue"))
-                .endMetadata()
-                .withNewSpec()
-                .withType("queue")
-                .withAddress("test-queue")
-                .withPlan(getDefaultPlan(AddressType.QUEUE))
-                .endSpec()
-                .build());
-        doTestAddressStatus(new AddressBuilder()
-                .withNewMetadata()
-                .withNamespace(getSharedAddressSpace().getMetadata().getNamespace())
-                .withName(AddressUtils.generateAddressMetadataName(getSharedAddressSpace(), "test-topic"))
-                .endMetadata()
-                .withNewSpec()
-                .withType("queue")
-                .withAddress("test-topic")
-                .withPlan(getDefaultPlan(AddressType.QUEUE))
-                .endSpec()
-                .build());
-        doTestAddressStatus(new AddressBuilder()
-                .withNewMetadata()
-                .withNamespace(getSharedAddressSpace().getMetadata().getNamespace())
-                .withName(AddressUtils.generateAddressMetadataName(getSharedAddressSpace(), "test-anycast"))
-                .endMetadata()
-                .withNewSpec()
-                .withType("anycast")
-                .withAddress("test-anycast")
-                .withPlan(DestinationPlan.STANDARD_SMALL_ANYCAST)
-                .endSpec()
-                .build());
-        doTestAddressStatus(new AddressBuilder()
-                .withNewMetadata()
-                .withNamespace(getSharedAddressSpace().getMetadata().getNamespace())
-                .withName(AddressUtils.generateAddressMetadataName(getSharedAddressSpace(), "test-multicast"))
-                .endMetadata()
-                .withNewSpec()
-                .withType("multicast")
-                .withAddress("test-multicast")
-                .withPlan(DestinationPlan.STANDARD_SMALL_MULTICAST)
-                .endSpec()
-                .build());
-    }
-
-    @Test
     @Disabled("disabled due to #1601")
     void testAddressNameWithHyphens() throws Exception {
         doTestWithStrangeAddressNames(true, false,
@@ -339,6 +345,6 @@ public class FirefoxWebConsoleTest extends WebConsoleTest implements ITestShared
     void testAddressWithValidPlanOnly() throws Exception {
         doTestAddressWithValidPlanOnly();
     }
-
+     **/
 
 }
