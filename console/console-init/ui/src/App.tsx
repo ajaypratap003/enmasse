@@ -4,18 +4,20 @@
  */
 
 import React from "react";
-import "./App.css";
 import "@patternfly/react-core/dist/styles/base.css";
 import { AppLayout } from "use-patternfly";
 import { useHistory } from "react-router-dom";
 import { Brand, Avatar } from "@patternfly/react-core";
-import brandImg from "./brand_logo.svg";
-import NavToolBar from "components/NavToolBar/NavToolBar";
-import { AppRoutes } from "AppRoutes";
 import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "@apollo/react-hooks";
+import NavToolBar from "components/NavToolBar/NavToolBar";
+import { AppRoutes } from "AppRoutes";
+import brandImg from "./brand_logo.svg";
 import avatarImg from "./img_avatar.svg";
 import { ErrorBoundary } from "./components/common/ErrorBoundary";
+import "./App.css";
+import { ErrorProvider, useErrorReducer } from "context-state-reducer";
+import { ServerErrorAlert } from "./components/common";
 
 const graphqlEndpoint = process.env.REACT_APP_GRAPHQL_ENDPOINT
   ? process.env.REACT_APP_GRAPHQL_ENDPOINT
@@ -40,18 +42,24 @@ const App: React.FC = () => {
     }),
     [history]
   );
+
+  const [contextValue] = useErrorReducer();
+
   return (
     <ApolloProvider client={client}>
-      <ErrorBoundary>
-        <AppLayout
-          logoProps={logoProps}
-          logo={logo}
-          avatar={avatar}
-          toolbar={<NavToolBar />}
-        >
-          <AppRoutes />
-        </AppLayout>
-      </ErrorBoundary>
+      <ErrorProvider value={contextValue}>
+        <ErrorBoundary>
+          <AppLayout
+            logoProps={logoProps}
+            logo={logo}
+            avatar={avatar}
+            toolbar={<NavToolBar />}
+          >
+            <ServerErrorAlert />
+            <AppRoutes />
+          </AppLayout>
+        </ErrorBoundary>
+      </ErrorProvider>
     </ApolloProvider>
   );
 };
