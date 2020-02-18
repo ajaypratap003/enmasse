@@ -3,7 +3,7 @@ import {initialState} from "./initialState";
 
 export interface IActionType{
     type:string,
-    payload:any    
+    payload?:any    
 };
 
 export const reducer=(state=initialState,action:IActionType)=>{

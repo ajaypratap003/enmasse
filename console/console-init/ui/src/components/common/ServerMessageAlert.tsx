@@ -1,22 +1,27 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Alert, AlertActionCloseButton } from "@patternfly/react-core";
 
-import { useErrorContext } from "context-state-reducer";
+import { useErrorContext, RESET_SERVER_ERROR } from "context-state-reducer";
 
 export const ServerMessageAlert: React.FC = () => {
-  const { state } = useErrorContext();
+  const { state, dispatch } = useErrorContext();
   const { hasServerError, errors } = state;
-  const [alertVisible, setAlertVisible] = React.useState(true);
+  const [alertVisible, setAlertVisible] = useState(true);
 
   const onClose = () => {
     setAlertVisible(false);
+    dispatch({ type: RESET_SERVER_ERROR });
   };
+
+  useEffect(() => {
+    hasServerError !== undefined && setAlertVisible(hasServerError);
+  }, [hasServerError]);
 
   if (hasServerError && alertVisible) {
     return (
       <Alert
         variant="danger"
-        title="Danger alert title"
+        title="Server Error"
         action={<AlertActionCloseButton onClose={onClose} />}
       >
         {errors && errors.message}

@@ -4,7 +4,7 @@ import {ApolloError,OperationVariables} from "apollo-client";
 
 import {useErrorContext,SET_SERVER_ERROR} from "context-state-reducer";
 
-export const useMutationQuery=(query:any,callbackOnError?:Function,callbackOnCompleted?:Function,refetchQueries?:Array<string>)=>{
+export const useMutationQuery=(query:any,callbackOnError?:Function,callbackOnCompleted?:Function)=>{
     const [variables,setVariables]=useState<OperationVariables>();  
     const {dispatch}=useErrorContext();  
 
@@ -15,8 +15,7 @@ export const useMutationQuery=(query:any,callbackOnError?:Function,callbackOnCom
         },
         onCompleted(data:any){
           callbackOnCompleted && callbackOnCompleted(data);
-        },
-        refetchQueries
+        }
       });
 
     useEffect(()=>{
