@@ -17,7 +17,7 @@ import avatarImg from "./img_avatar.svg";
 import { ErrorBoundary } from "./components/common/ErrorBoundary";
 import "./App.css";
 import { ErrorProvider, useErrorReducer } from "context-state-reducer";
-import { ServerErrorAlert } from "./components/common";
+import { ServerMessageAlert } from "./components/common";
 
 const graphqlEndpoint = process.env.REACT_APP_GRAPHQL_ENDPOINT
   ? process.env.REACT_APP_GRAPHQL_ENDPOINT
@@ -55,7 +55,7 @@ const App: React.FC = () => {
             avatar={avatar}
             toolbar={<NavToolBar />}
           >
-            <ServerErrorAlert />
+            <ServerMessageAlert />
             <AppRoutes />
           </AppLayout>
         </ErrorBoundary>

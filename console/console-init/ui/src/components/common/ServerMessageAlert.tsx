@@ -3,7 +3,7 @@ import { Alert, AlertActionCloseButton } from "@patternfly/react-core";
 
 import { useErrorContext } from "context-state-reducer";
 
-export const ServerErrorAlert: React.FC = () => {
+export const ServerMessageAlert: React.FC = () => {
   const { state } = useErrorContext();
   const { hasServerError, errors } = state;
   const [alertVisible, setAlertVisible] = React.useState(true);
@@ -19,7 +19,7 @@ export const ServerErrorAlert: React.FC = () => {
         title="Danger alert title"
         action={<AlertActionCloseButton onClose={onClose} />}
       >
-        Something went wrong...
+        {errors && errors.message}
       </Alert>
     );
   }
