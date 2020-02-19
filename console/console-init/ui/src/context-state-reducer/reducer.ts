@@ -1,4 +1,4 @@
-import *as types from "./actions";
+import  {types} from "./actions";
 import {initialState} from "./initialState";
 
 export interface IActionType{

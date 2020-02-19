@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Alert, AlertActionCloseButton } from "@patternfly/react-core";
 
-import { useErrorContext, RESET_SERVER_ERROR } from "context-state-reducer";
+import { useErrorContext, types } from "context-state-reducer";
 
 export const ServerMessageAlert: React.FC = () => {
   const { state, dispatch } = useErrorContext();
@@ -10,7 +10,16 @@ export const ServerMessageAlert: React.FC = () => {
 
   const onClose = () => {
     setAlertVisible(false);
-    dispatch({ type: RESET_SERVER_ERROR });
+    dispatch({ type: types.RESET_SERVER_ERROR });
+  };
+
+  const getErrorMessage = () => {
+    const { graphQLErrors } = errors;
+    let message: string = "Something went wrong, please try again...";
+    if (graphQLErrors && graphQLErrors.length > 0) {
+      message = graphQLErrors[0].message;
+    }
+    return message;
   };
 
   useEffect(() => {
@@ -24,7 +33,7 @@ export const ServerMessageAlert: React.FC = () => {
         title="Server Error"
         action={<AlertActionCloseButton onClose={onClose} />}
       >
-        {errors && errors.message}
+        {getErrorMessage()}
       </Alert>
     );
   }

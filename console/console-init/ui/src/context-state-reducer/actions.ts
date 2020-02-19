@@ -1,7 +1,7 @@
 const SET_SERVER_ERROR="SET_SERVER_ERROR";
 const RESET_SERVER_ERROR="RESET_SERVER_ERROR";
 
-export{
+export const types={
     SET_SERVER_ERROR,
     RESET_SERVER_ERROR
 };
