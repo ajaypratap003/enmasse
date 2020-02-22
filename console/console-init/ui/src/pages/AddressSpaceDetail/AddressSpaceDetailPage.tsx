@@ -35,6 +35,8 @@ import {
 import { DialoguePrompt } from "components/common/DialoguePrompt";
 import { POLL_INTERVAL } from "constants/constants";
 import { ErrorAlert } from "components/common/ErrorAlert";
+import { useMutationQuery } from "hooks";
+
 const styles = StyleSheet.create({
   no_bottom_padding: {
     paddingBottom: 0
@@ -93,6 +95,18 @@ export default function AddressSpaceDetailPage() {
     { pollInterval: POLL_INTERVAL }
   );
   const client = useApolloClient();
+
+  const resetFormState = (data: any) => {
+    if (data) {
+      setIsDeleteModalOpen(!isDeleteModalOpen);
+      history.push("/");
+    }
+  };
+  const [setDeleteAddressSpaceQueryVariables] = useMutationQuery(
+    DELETE_ADDRESS_SPACE,
+    resetFormState
+  );
+
   if (loading) return <Loading />;
 
   if (error) {
@@ -133,21 +147,19 @@ export default function AddressSpaceDetailPage() {
   const handleCancelDelete = () => {
     setIsDeleteModalOpen(!isDeleteModalOpen);
   };
-  // async function to delete a address space
-  const deleteAddressSpace = async (data: IObjectMeta_v1_Input) => {
-    const deletedData = await client.mutate({
-      mutation: DELETE_ADDRESS_SPACE,
-      variables: {
-        a: {
-          name: data.name,
-          namespace: data.namespace
-        }
+
+  /**
+   * delete address space
+   * @param data
+   */
+  const deleteAddressSpace = (data: IObjectMeta_v1_Input) => {
+    const variables = {
+      a: {
+        name: data.name,
+        namespace: data.namespace
       }
-    });
-    if (deletedData.data && deletedData.data.deleteAddressSpace) {
-      setIsDeleteModalOpen(!isDeleteModalOpen);
-      history.push("/");
-    }
+    };
+    setDeleteAddressSpaceQueryVariables(variables);
   };
   const handleDelete = () => {
     deleteAddressSpace({
