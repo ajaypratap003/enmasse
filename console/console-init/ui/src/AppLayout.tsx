@@ -10,13 +10,14 @@ import { useHistory } from "react-router-dom";
 import { Brand, Avatar } from "@patternfly/react-core";
 import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "@apollo/react-hooks";
-import NavToolBar from "components/NavToolBar/NavToolBar";
-import { AppRoutes } from "AppRoutes";
+import NavToolBar from "./components/NavToolBar/NavToolBar";
+import { AppRoutes } from "./AppRoutes";
 import brandImg from "./brand_logo.svg";
 import avatarImg from "./img_avatar.svg";
 import "./App.css";
 import { ServerMessageAlert } from "./components/common";
-import { useErrorContext } from "context-state-reducer";
+import { useErrorContext } from "./context-state-reducer";
+import { onServerError } from "./graphql-module";
 
 let history: any;
 let dispactAction: any;
@@ -25,17 +26,11 @@ let hasServerError: any;
 const graphqlEndpoint = process.env.REACT_APP_GRAPHQL_ENDPOINT
   ? process.env.REACT_APP_GRAPHQL_ENDPOINT
   : "http://localhost:4000";
+
 const client = new ApolloClient({
   uri: graphqlEndpoint,
   onError(error: any) {
-    const { graphQLErrors, networkError } = error;
-    if (networkError && !graphQLErrors) {
-      history && history.push("/server-error");
-    } else if (graphQLErrors) {
-      hasServerError !== true &&
-        dispactAction &&
-        dispactAction({ type: "SET_SERVER_ERROR", payload: error });
-    }
+    onServerError(error, history, dispactAction, hasServerError);
   }
 });
 
