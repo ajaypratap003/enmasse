@@ -34,7 +34,6 @@ import {
 } from "queries";
 import { DialoguePrompt } from "components/common/DialoguePrompt";
 import { POLL_INTERVAL } from "constants/constants";
-import { ErrorAlert } from "components/common/ErrorAlert";
 import { useMutationQuery } from "hooks";
 
 const styles = StyleSheet.create({
@@ -109,9 +108,6 @@ export default function AddressSpaceDetailPage() {
 
   if (loading) return <Loading />;
 
-  if (error) {
-    return <ErrorAlert error={error} />;
-  }
   const { addressSpaces } = data || {
     addressSpaces: { total: 0, addressSpaces: [] }
   };
@@ -167,11 +163,20 @@ export default function AddressSpaceDetailPage() {
       namespace: addressSpaceDetails.namespace
     });
   };
+
+  const metadata =
+    addressSpaces &&
+    addressSpaces.addressSpaces[0] &&
+    addressSpaces.addressSpaces[0].metadata;
   const addressSpaceDetails: IAddressSpaceHeaderProps = {
-    name: addressSpaces.addressSpaces[0].metadata.name,
-    namespace: addressSpaces.addressSpaces[0].metadata.namespace,
-    createdOn: addressSpaces.addressSpaces[0].metadata.creationTimestamp,
-    type: addressSpaces.addressSpaces[0].spec.type,
+    name: metadata && metadata.name,
+    namespace: metadata && metadata.namespace,
+    createdOn: metadata && metadata.creationTimestamp,
+    type:
+      addressSpaces &&
+      addressSpaces.addressSpaces[0] &&
+      addressSpaces.addressSpaces[0].spec &&
+      addressSpaces.addressSpaces[0].spec.type,
     onDownload: data => {
       downloadCertificate(data);
     },
