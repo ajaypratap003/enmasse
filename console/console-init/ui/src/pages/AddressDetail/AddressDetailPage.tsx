@@ -106,13 +106,12 @@ export default function AddressDetailPage() {
   );
 
   if (loading) return <Loading />;
-  if (error) return <ErrorAlert error={error} />;
   const { addresses } = data || {
     addresses: { total: 0, addresses: [] }
   };
 
   const addressDetail = addresses && addresses.addresses[0];
-  if (addressPlan === null) {
+  if (addressPlan === null && addressDetail) {
     setAddressPlan(addressDetail.spec.plan.spec.displayName);
   }
 
@@ -204,13 +203,15 @@ export default function AddressDetailPage() {
         ]}
         isFooterLeftAligned
       >
-        <EditAddress
-          name={addressDetail.metadata.name}
-          type={addressDetail.spec.plan.spec.addressType}
-          plan={addressPlan || ""}
-          addressSpacePlan={addressSpacePlan}
-          onChange={setAddressPlan}
-        />
+        {addressDetail && (
+          <EditAddress
+            name={addressDetail.metadata.name}
+            type={addressDetail.spec.plan.spec.addressType}
+            plan={addressPlan || ""}
+            addressSpacePlan={addressSpacePlan}
+            onChange={setAddressPlan}
+          />
+        )}
       </Modal>
       {isDeleteModalOpen && (
         <DialoguePrompt
