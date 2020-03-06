@@ -23,10 +23,11 @@ export const DialoguePrompt: React.FunctionComponent<IDialogueProps> = ({
   handleConfirmDialogue
 }) => {
   let nameString = "";
-  for (let i = 0; i < names.length; i++) {
-    if (i > 0) nameString += ", ";
-    nameString += names[i];
+
+  if (Array.isArray(names)) {
+    nameString = names.join(",");
   }
+
   return (
     <Modal
       id="Dialogue-prompt-modal"

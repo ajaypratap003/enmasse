@@ -34,3 +34,27 @@ export const reducer = (state = initialState, action: IActionType) => {
       return state;
   }
 };
+
+const initialStateModal = {
+  modalType: null,
+  modalProps: {}
+};
+
+export const modalReducer = (state = initialStateModal, action: any) => {
+  switch (action.type) {
+    case "SHOW_MODAL":
+      return {
+        modalType: action.modalType,
+        modalProps: action.modalProps
+      };
+    case "HIDE_MODAL":
+      return initialState;
+    default:
+      return state;
+  }
+};
+
+export const rootReducer = {
+  reducer,
+  modalReducer
+};
