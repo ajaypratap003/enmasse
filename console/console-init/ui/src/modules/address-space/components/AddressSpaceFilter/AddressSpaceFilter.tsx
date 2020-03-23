@@ -13,13 +13,12 @@ import {
   SelectOption,
   Select,
   SelectVariant,
-  SelectOptionObject,
   DataToolbarChipGroup,
   DataToolbarChip,
   DataToolbarGroup,
   DataToolbarFilter,
   DataToolbarItem,
-  DataToolbarToggleGroup
+  DataToolbarToggleGroup,
   SelectOptionObject,
   DropdownPosition
 } from "@patternfly/react-core";
@@ -115,7 +114,7 @@ export const AddressSpaceFilter: React.FC<IAddressSpaceFilterProps> = ({
             position={DropdownPosition.left}
             onSelectItem={onFilterSelect}
             dropdownItems={filterMenuItems}
-            value={filterValue?.trim() || "Filter"}
+            value={(filterValue && filterValue.trim()) || "Filter"}
             toggleIcon={
               <>
                 <FilterIcon />

@@ -11,6 +11,7 @@ import {
   ISearchAddressLinkNameResponse
 } from "types/ResponseTypes";
 import { AddressLinksToolbarToggleGroup } from "modules/address-detail/components/AddressLinksToolbarToggleGroup";
+import { DataToolbarChipGroup, DataToolbarChip } from "@patternfly/react-core";
 
 interface IAddressLinksFilterProps {
   filterValue: string;
