@@ -6,10 +6,7 @@
 import React from "react";
 import { render } from "@testing-library/react";
 import { MemoryRouter } from "react-router";
-import {
-  IAddressSpace,
-  AddressSpaceList
-} from "modules/address-space/components/AddressSpaceList";
+import { IAddressSpace, AddressSpaceList } from "./AddressSpaceList";
 import { ISortBy } from "@patternfly/react-table";
 
 describe("Address space List", () => {
