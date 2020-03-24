@@ -61,13 +61,22 @@ const TypeAheadSelect: React.FunctionComponent<ITypeAheadSelectProps> = ({
     const value = e.target.value;
     setInputData(value);
     onChangeInputData(value);
-    const dropdownOptions: React.ReactElement[] = options
-      ? options.map((option, index) => (
+    const dropdownOptions: React.ReactElement[] = selectOptions
+      ? selectOptions.map((option: any, index: number) => (
           <SelectOption key={index} value={option} />
         ))
       : [];
     setSelectOptions(dropdownOptions);
     return dropdownOptions;
+
+    // let input:any;
+    //   try {
+    //     input = new RegExp(value, 'i');
+    //   } catch (err) {}
+    //   let dropdownOptions =
+    //     value !== '' ? selectOptions && selectOptions.length>0 && selectOptions.filter((child:any) => input.test(child.props.value)) :selectOptions;
+    //   setSelectOptions(dropdownOptions);
+    //   return dropdownOptions;
   };
 
   return (

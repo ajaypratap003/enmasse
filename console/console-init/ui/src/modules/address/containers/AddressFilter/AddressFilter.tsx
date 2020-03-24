@@ -60,6 +60,7 @@ export const AddressListFilter: React.FunctionComponent<IAddressListFilterProps>
           ]);
           setNameSelected(undefined);
         }
+      setNameInput("");
     }
     if (!nameSelected && nameInput && nameInput.trim() !== "")
       if (filterNames.map(filter => filter.value).indexOf(nameInput.trim()) < 0)

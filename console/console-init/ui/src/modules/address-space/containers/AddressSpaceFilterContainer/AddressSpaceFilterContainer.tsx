@@ -82,6 +82,7 @@ export const AddressSpaceFilterContainer: React.FunctionComponent<IAddressSpaceF
               { value: nameInput.trim(), isExact: false }
             ]);
         setNameSelected(undefined);
+        setNameInput("");
       } else if (filterValue === "Namespace") {
         if (namespaceSelected && namespaceSelected.trim() !== "" && filterNames)
           if (
@@ -200,11 +201,12 @@ export const AddressSpaceFilterContainer: React.FunctionComponent<IAddressSpaceF
   const onNameSelectFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNameInput(e.target.value);
     onChangeNameData(e.target.value);
-    const options: React.ReactElement[] = nameOptions
+    const options: any[] = nameOptions
       ? nameOptions.map((option, index) => (
           <SelectOption key={index} value={option} />
         ))
       : [];
+    setNameOptions(options);
     return options;
   };
 

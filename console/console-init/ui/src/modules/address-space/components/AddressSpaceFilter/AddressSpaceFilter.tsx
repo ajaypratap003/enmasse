@@ -146,7 +146,7 @@ export const AddressSpaceFilter: React.FC<IAddressSpaceFilterProps> = ({
                         setIsSelectNameExpanded(false);
                       }}
                       maxHeight="200px"
-                      selections={nameSelected}
+                      selections={nameSelected || nameInput}
                       onFilter={onNameSelectFilterChange}
                       isExpanded={isSelectNameExpanded}
                       ariaLabelledBy={"typeahead-select-id"}
