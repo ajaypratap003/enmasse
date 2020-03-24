@@ -3,7 +3,7 @@
  * License: Apache License 2.0 (see the file LICENSE or http://apache.org/licenses/LICENSE-2.0.html).
  */
 
-import React from "react";
+import React, { useState } from "react";
 import { useApolloClient } from "@apollo/react-hooks";
 import {
   DataToolbarChip,
@@ -29,8 +29,7 @@ import {
 } from "@patternfly/react-core";
 import { FilterIcon, SearchIcon } from "@patternfly/react-icons";
 import { ISortBy } from "@patternfly/react-table";
-import useWindowDimensions from "components/common/WindowDimension";
-import { SortForMobileView } from "components/common/SortForMobileView";
+import { useWindowDimensions, SortForMobileView } from "components";
 import { RETURN_ALL_CONNECTIONS_HOSTNAME_AND_CONTAINERID_OF_ADDRESS_SPACES_FOR_TYPEAHEAD_SEARCH } from "graphql-module/queries";
 import { IConnectionListNameSearchResponse } from "types/ResponseTypes";
 import {
@@ -68,28 +67,26 @@ export const ConnectionToolbar: React.FunctionComponent<IConnectionToolbarProps>
 }) => {
   const { width } = useWindowDimensions();
   const client = useApolloClient();
-  const [filterIsExpanded, setFilterIsExpanded] = React.useState(false);
+  const [filterIsExpanded, setFilterIsExpanded] = useState(false);
 
   const onFilterSelect = (event: any) => {
     setFilterValue(event.target.value);
     setFilterIsExpanded(!filterIsExpanded);
   };
-  const [
-    isSelectHostnameExpanded,
-    setIsSelectHostnameExpanded
-  ] = React.useState<boolean>(false);
-  const [
-    isSelectContainerExpanded,
-    setIsSelectContainerExpanded
-  ] = React.useState<boolean>(false);
-  const [hostnameSelected, setHostnameSelected] = React.useState<string>();
-  const [containerSelected, setContainerSelected] = React.useState<string>();
-  const [hostNameInput, setHostNameInput] = React.useState<string>("");
-  const [containerInput, setContainerInput] = React.useState<string>("");
-  const [hostnameOptions, setHostnameOptions] = React.useState<
+  const [isSelectHostnameExpanded, setIsSelectHostnameExpanded] = useState<
+    boolean
+  >(false);
+  const [isSelectContainerExpanded, setIsSelectContainerExpanded] = useState<
+    boolean
+  >(false);
+  const [hostnameSelected, setHostnameSelected] = useState<string>();
+  const [containerSelected, setContainerSelected] = useState<string>();
+  const [hostNameInput, setHostNameInput] = useState<string>("");
+  const [containerInput, setContainerInput] = useState<string>("");
+  const [hostnameOptions, setHostnameOptions] = useState<
     Array<ISelectOption>
   >();
-  const [containerOptions, setContainerOptions] = React.useState<
+  const [containerOptions, setContainerOptions] = useState<
     Array<ISelectOption>
   >();
 

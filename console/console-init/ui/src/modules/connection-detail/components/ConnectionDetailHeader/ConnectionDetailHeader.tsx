@@ -3,7 +3,7 @@
  * License: Apache License 2.0 (see the file LICENSE or http://apache.org/licenses/LICENSE-2.0.html).
  */
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Title,
   Flex,
@@ -13,12 +13,13 @@ import {
   CardBody
 } from "@patternfly/react-core";
 import { AngleDownIcon, AngleUpIcon } from "@patternfly/react-icons";
+import { FormatDistance } from "use-patternfly";
 import { ConnectionDetailHeaderAttributes } from "./ConnectionDetailHeaderAttributes";
 import { MessagesDetailHeaderAttributes } from "./MessagesDetailHeaderAttributes";
 import { css, StyleSheet } from "@patternfly/react-styles";
-import { ConnectionProtocolFormat } from "components/common/ConnectionListFormatter";
-import useWindowDimensions from "components/common/WindowDimension";
-import { FormatDistance } from "use-patternfly";
+import { ConnectionProtocolFormat } from "utils";
+import { useWindowDimensions } from "components";
+
 const styles = StyleSheet.create({
   expandable: {
     color: "rgb(0, 102, 204)"
@@ -57,7 +58,7 @@ export const ConnectionDetailHeader: React.FunctionComponent<IConnectionHeaderDe
   messageOut,
   addressSpaceType
 }) => {
-  const [isHidden, setIsHidden] = React.useState(true);
+  const [isHidden, setIsHidden] = useState(true);
   const { width } = useWindowDimensions();
 
   return (

@@ -3,10 +3,9 @@
  * License: Apache License 2.0 (see the file LICENSE or http://apache.org/licenses/LICENSE-2.0.html).
  */
 
-import React from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router";
 import { useParams, Link } from "react-router-dom";
-import { AddressSpaceNavigation } from "components/AddressSpace/AddressSpaceNavigation";
 import {
   useA11yRouteChange,
   useDocumentTitle,
@@ -23,16 +22,17 @@ import {
 } from "@patternfly/react-core";
 import {
   IAddressSpaceHeaderProps,
-  AddressSpaceHeader
-} from "components/AddressSpace/AddressSpaceHeader";
+  AddressSpaceHeader,
+  AddressSpaceNavigation,
+  IAddressSpace
+} from "modules/address-space";
 import {
   DOWNLOAD_CERTIFICATE,
   DELETE_ADDRESS_SPACE,
   RETURN_ADDRESS_SPACE_DETAIL
 } from "graphql-module/queries";
 import { POLL_INTERVAL, FetchPolicy } from "constants/constants";
-import { NoDataFound } from "components/common/NoDataFound";
-import { IAddressSpace } from "modules/address-space/components/AddressSpaceList/AddressSpaceList";
+import { NoDataFound } from "components";
 import { useMutationQuery } from "hooks";
 import { Routes } from "./Routes";
 import { useStoreContext, types, MODAL_TYPES } from "context-state-reducer";
@@ -65,7 +65,7 @@ export default function AddressSpaceDetailPage() {
   useA11yRouteChange();
   useBreadcrumb(breadcrumb);
   useDocumentTitle("Address Space Detail");
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const { loading, data } = useQuery<IAddressSpaceDetailResponse>(
     RETURN_ADDRESS_SPACE_DETAIL(name, namespace),

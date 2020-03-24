@@ -3,7 +3,7 @@
  * License: Apache License 2.0 (see the file LICENSE or http://apache.org/licenses/LICENSE-2.0.html).
  */
 
-import React from "react";
+import React, { useState } from "react";
 import {
   DropdownPosition,
   DropdownItem,
@@ -16,7 +16,7 @@ import {
 } from "@patternfly/react-core";
 import { FormatDistance } from "use-patternfly";
 import { css, StyleSheet } from "@patternfly/react-styles";
-import { AddressSpaceType } from "components/common/AddressSpaceListFormatter";
+import { AddressSpaceType } from "modules/address-space/utils";
 import { DropdownWithKababToggle } from "components";
 
 const styles = StyleSheet.create({
