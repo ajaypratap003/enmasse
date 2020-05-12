@@ -43,4 +43,29 @@ JavaScript dependencies are managed using `npm`, but it is invoked using maven a
 JavaScript code generally follows [JavaScript Style Guide and Coding Conventions](https://www.w3schools.com/js/js_conventions.asp) with the most important being:
 
 * 2 spaces indentation
-* Variable names and functions use camelcase
+* Variable and functions name should be in camelcase
+* Use let or const data type for local scope variable
+* Don't use inline function to avoid memory leak
+* Don't modify original object directly. Create new copy of object by using spread operator or Object.assign() etc.
+* Use destructuring for obejct for more readability and avoid to call same object again and again
+
+
+## ReactJS
+ReactJS code follow some basic style guide [ReactJS Style Guide]()https://github.com/airbnb/javascript/tree/master/react
+and (https://reactjs.org/docs/getting-started.html)
+
+* Don't call useEffect hook in condition and pass dependancy to avoid component re-rendering
+
+
+## Front-End Unit Test Style Guide and Codding Convensions
+
+React unit test follows [React Testing Style Guide and Codding Convensions](https://testing-library.com/docs/guiding-principles), [Jest Style Guide](https://jestjs.io/docs/en/getting-started) and [React Apollo Style Guide](https://www.apollographql.com/docs/react/development-testing/testing/)
+
+* Add component/function name in describe i.e. describe("<ComponentName/> or functionName",()=>{})
+* Add separate describe in case function/component have multiple tests
+* Use jest.fn() for function/events
+* Mock internal function/event by using jest.mock
+* Follow It instead test 
+* Follow test message format as it(('should something')=>{}). Message should start with should.
+* Mock test data, don't call remote api
+
