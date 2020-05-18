@@ -3,7 +3,7 @@
  * License: Apache License 2.0 (see the file LICENSE or http://apache.org/licenses/LICENSE-2.0.html).
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import { ISortBy } from "@patternfly/react-table";
 import { Loading } from "use-patternfly";
@@ -42,6 +42,7 @@ export const ConnectionContainer: React.FunctionComponent<IConnectionProps> = ({
   setSortValue,
   addressSpaceType
 }) => {
+  const [counter, setCounter] = useState(0);
   const [sortBy, setSortBy] = useState<ISortBy>();
   if (sortValue && sortBy !== sortValue) {
     setSortBy(sortValue);
@@ -58,6 +59,13 @@ export const ConnectionContainer: React.FunctionComponent<IConnectionProps> = ({
     ),
     { pollInterval: POLL_INTERVAL, fetchPolicy: FetchPolicy.NETWORK_ONLY }
   );
+
+  useEffect(() => {
+    if (sortBy?.direction === "desc") {
+      const newCounter = counter + 1;
+      setCounter(newCounter);
+    }
+  }, [data, sortBy]);
 
   if (loading) return <Loading />;
 
@@ -81,6 +89,9 @@ export const ConnectionContainer: React.FunctionComponent<IConnectionProps> = ({
           "enmasse_messages_out"
         ),
         senders: getFilteredValue(connection.metrics, "enmasse_senders"),
+        newSenders:
+          Number(getFilteredValue(connection.metrics, "enmasse_senders")) +
+          counter,
         receivers: getFilteredValue(connection.metrics, "enmasse_receivers"),
         status: "running",
         name: connection.metadata.name,
@@ -90,9 +101,12 @@ export const ConnectionContainer: React.FunctionComponent<IConnectionProps> = ({
   };
 
   const onSort = (_event: any, index: any, direction: any) => {
+    setCounter(0);
     setSortBy({ index: index, direction: direction });
     setSortValue({ index: index, direction: direction });
   };
+
+  console.log("getRows", getRows());
   return (
     <>
       <ConnectionList
@@ -100,6 +114,7 @@ export const ConnectionContainer: React.FunctionComponent<IConnectionProps> = ({
         addressSpaceType={addressSpaceType}
         sortBy={sortBy}
         onSort={onSort}
+        counter={counter}
       />
       {(connections && connections.total) > 0 ? "" : <EmptyConnection />}
     </>

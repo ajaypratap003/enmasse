@@ -25,6 +25,7 @@ interface IConnectionListProps {
   addressSpaceType?: string;
   sortBy?: ISortBy;
   onSort?: (_event: any, index: number, direction: string) => void;
+  counter?: number;
 }
 export interface IConnection {
   hostname: string;
@@ -38,13 +39,15 @@ export interface IConnection {
   status: "creating" | "deleting" | "running";
   name: string;
   creationTimestamp: string;
+  newSenders?: number | string;
 }
 
 export const ConnectionList: React.FunctionComponent<IConnectionListProps> = ({
   rows,
   addressSpaceType,
   sortBy,
-  onSort
+  onSort,
+  counter = 0
 }) => {
   const { width } = useWindowDimensions();
 
@@ -74,7 +77,17 @@ export const ConnectionList: React.FunctionComponent<IConnectionListProps> = ({
         !addressSpaceType || addressSpaceType === "brokered"
           ? ""
           : row.messageOut,
-        row.senders,
+        {
+          title: (
+            <>
+              {row.senders}
+              <span style={{ display: "none-1" }}>
+                {" "}
+                {Number(row.newSenders)}
+              </span>
+            </>
+          )
+        },
         row.receivers
       ],
       originalData: row
