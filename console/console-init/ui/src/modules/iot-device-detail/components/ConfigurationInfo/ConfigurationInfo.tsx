@@ -131,7 +131,7 @@ export const ConfigurationInfo: React.FC<IConfigurationInfoProps> = ({
       </Tooltip>
       <Page id={id}>
         <PageSection>
-          <Grid gutter="sm">
+          <Grid hasGutter>
             <GridItem span={6}>
               <Card>
                 <CardBody>

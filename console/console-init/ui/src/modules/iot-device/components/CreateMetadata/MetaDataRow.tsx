@@ -36,6 +36,7 @@ export const MetaDataRow: React.FC<IMetaDataRow> = ({
     updatedTypeMetadata[rowIndex].type = typeValue;
     if (isObjectOrArray(typeValue as any))
       updatedTypeMetadata[rowIndex].value = "";
+
     setMetadataList(updatedTypeMetadata);
   };
 
@@ -75,7 +76,7 @@ export const MetaDataRow: React.FC<IMetaDataRow> = ({
   //TODO: Increase width of type dropdown
   return (
     <>
-      <Grid gutter="sm">
+      <Grid hasGutter>
         <GridItem span={5}>
           <InputGroup>
             <TextInput
