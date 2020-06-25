@@ -66,6 +66,8 @@ enum CredentialsType {
   X509_CERTIFICATE = "x509-cert"
 }
 
+const WIZARD_HEIGHT = 400;
+
 export {
   UNKNOWN,
   POLL_INTERVAL,
@@ -82,5 +84,6 @@ export {
   DataType,
   Protocols,
   DialogTypes,
-  CredentialsType
+  CredentialsType,
+  WIZARD_HEIGHT
 };
