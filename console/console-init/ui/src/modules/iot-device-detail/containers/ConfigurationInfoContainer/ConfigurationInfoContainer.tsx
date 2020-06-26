@@ -23,8 +23,8 @@ export const ConfigurationInfoContainer: React.FC<Pick<
   "id"
 >> = ({ id }) => {
   const { projectname, deviceid } = useParams();
-  const [filterType, setFilterType] = useState();
-  const [filterValue, setFilterValue] = useState();
+  const [filterType, setFilterType] = useState("");
+  const [filterValue, setFilterValue] = useState("");
 
   const { data } = useQuery<ICredentialsReponse>(
     RETURN_IOT_CREDENTIALS(
