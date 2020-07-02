@@ -11,14 +11,27 @@ import {
   Button,
   ButtonVariant
 } from "@patternfly/react-core";
+import { useParams } from "react-router";
+import { useQuery } from "@apollo/react-hooks";
 import { AddCredential } from "modules/iot-device/components";
 import { useStoreContext, types } from "context-state-reducer";
+import { RETURN_IOT_CREDENTIALS } from "graphql-module/queries";
+import { ICredentialsReponse } from "schema";
+import { Loading } from "use-patternfly";
 
 export const EditCredentialsContainer = () => {
   const { dispatch } = useStoreContext();
-  /**
-   * TODO: write query to get credetials
-   */
+  const { projectname, deviceid } = useParams();
+
+  const { data, loading } = useQuery<ICredentialsReponse>(
+    RETURN_IOT_CREDENTIALS(projectname, deviceid)
+  );
+  const { credentials } = data?.credentials || {};
+  const credentialList = credentials && JSON.parse(credentials);
+
+  if (loading) {
+    return <Loading />;
+  }
 
   const resetActionType = () => {
     dispatch({ type: types.RESET_DEVICE_ACTION_TYPE });
@@ -41,7 +54,7 @@ export const EditCredentialsContainer = () => {
         Edit credentials
       </Title>
       <br />
-      <AddCredential />
+      <AddCredential iotCredentials={credentialList} />
       <br />
       <br />
       <Flex>

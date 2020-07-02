@@ -91,6 +91,7 @@ export const SecretList: React.FC<ISecretListProps> = ({
                 type="password"
                 name="pwd-hash"
                 onChange={handleInputChangeSecret}
+                value={secret["pwd-hash"]}
               />
             </FormGroup>
             <br />
@@ -109,6 +110,7 @@ export const SecretList: React.FC<ISecretListProps> = ({
                 type="text"
                 name="key"
                 onChange={handleInputChangeSecret}
+                value={secret["key"]}
               />
             </FormGroup>
           </GridItem>
@@ -133,6 +135,7 @@ export const SecretList: React.FC<ISecretListProps> = ({
       <>
         {hasOwnProperty(secret, "not-before") && (
           <GridItem span={6}>
+            <br />
             <FormGroup
               fieldId={"sc-not-before-textinput-" + id}
               label="Not before"
@@ -144,19 +147,22 @@ export const SecretList: React.FC<ISecretListProps> = ({
                 name="not-before"
                 placeholder="YYYY-MM-DD 00:00"
                 onChange={handleInputChangeSecret}
+                value={secret["not-before"]}
               />
             </FormGroup>
           </GridItem>
         )}
         {hasOwnProperty(secret, "not-after") && (
           <GridItem span={6}>
+            <br />
             <FormGroup fieldId={"not-after" + id} label="Not after">
               <TextInput
                 id={"sc-not-after-textinput-" + id}
-                type="datetime-local"
+                type="text"
                 name="not-after"
                 placeholder="YYYY-MM-DD 00:00"
                 onChange={handleInputChangeSecret}
+                value={secret["not-after"]}
               />
             </FormGroup>
           </GridItem>
@@ -169,6 +175,7 @@ export const SecretList: React.FC<ISecretListProps> = ({
                 id={"sc-comment-textinput-" + id}
                 name="comment"
                 onChange={handleInputChangeSecret}
+                value={secret["comment"]}
               />
             </FormGroup>
           </GridItem>

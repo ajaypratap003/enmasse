@@ -188,7 +188,8 @@ export const CredentialList: React.FC<ICredentialListProps> = ({
           const {
             id = "",
             isExpandedAdvancedSetting = false,
-            type = ""
+            type = "",
+            "auth-id": authId
           } = credential;
           return (
             <Grid key={id}>
@@ -225,6 +226,7 @@ export const CredentialList: React.FC<ICredentialListProps> = ({
                           onChange={(value, event) =>
                             handleInputChange(id, event, value)
                           }
+                          value={authId}
                         />
                       </FormGroup>
                       <FormGroup

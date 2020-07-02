@@ -12,8 +12,11 @@ import {
   ISecret
 } from "modules/iot-device/components";
 import { uniqueId, findIndexByProperty } from "utils";
+import { CredentialsType } from "constant";
 
-export const AddCredential: React.FC<{}> = () => {
+export const AddCredential: React.FC<{ iotCredentials?: ICredential[] }> = ({
+  iotCredentials
+}) => {
   const getExtensionsFieldsInitialState = () => {
     const initialState: IExtension = {
       id: uniqueId(),
@@ -37,16 +40,16 @@ export const AddCredential: React.FC<{}> = () => {
     return initialState;
   };
 
-  const [credentials, setCredentials] = useState([
-    getCredentialsFieldsInitialState()
-  ]);
+  const [credentials, setCredentials] = useState<ICredential[]>(
+    iotCredentials || [getCredentialsFieldsInitialState()]
+  );
   const [type, setType] = useState<string>("hashed-password");
   const [activeCredentialFormId, setActiveCredentialFormId] = useState("");
 
   const getSecretsFieldsInitialState = () => {
     let initialState: ISecret = {};
     switch (type && type.toLowerCase()) {
-      case "hashed-password":
+      case CredentialsType.PASSWORD:
         initialState = {
           "pwd-hash": "",
           "not-before": "",
@@ -54,10 +57,10 @@ export const AddCredential: React.FC<{}> = () => {
           comment: ""
         };
         break;
-      case "x509":
+      case CredentialsType.X509_CERTIFICATE:
         initialState = { "not-before": "", "not-after": "", comment: "" };
         break;
-      case "psk":
+      case CredentialsType.PSK:
         initialState = {
           key: "",
           "not-before": "",
@@ -90,7 +93,18 @@ export const AddCredential: React.FC<{}> = () => {
     const index = findIndexByProperty(credentials, "id", activeFormId);
     if (index >= 0) {
       const initialState = getFormInitialStateByProperty("secrets");
-      newCredentials[index]["secrets"] = [{ id: uniqueId(), ...initialState }];
+      const secrets = newCredentials[index]["secrets"];
+      const newSecrets: any = [];
+      if (secrets?.length > 0) {
+        secrets.forEach(secret => {
+          newSecrets.push({ ...initialState, ...secret });
+        });
+        newCredentials[index]["secrets"] = newSecrets;
+      } else {
+        newCredentials[index]["secrets"] = [
+          { id: uniqueId(), ...initialState }
+        ];
+      }
       setCredentials(newCredentials);
     }
   };

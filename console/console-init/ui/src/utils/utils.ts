@@ -139,7 +139,7 @@ const findIndexByProperty = (
   targetPropertyValue: any
 ) => {
   if (items && targetProperty && targetPropertyValue) {
-    return items.findIndex(
+    return items?.findIndex(
       item => item[targetProperty] === targetPropertyValue
     );
   }

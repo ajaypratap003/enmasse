@@ -1979,7 +1979,7 @@ function deleteIotProject(iotProject) {
   let devIndex = getIotDevicesProjectIndex(iotProject.name);
 
   // delete iot devices for this project
-  iotdevices[devIndex].splice(devIndex, 1);
+  iotdevices.splice(devIndex, 1);
   iotProjects.splice(pjIndex, 1);
 }
 
@@ -2161,7 +2161,7 @@ createIotDevice("iotProjectFrance", {
     },
     status: getIotDeviceStatusSection()
   }),
-  credentials: []
+  credentials: ""
 });
 
 createIotDevice("iotProjectFrance", {
@@ -2345,7 +2345,28 @@ function setCredentials(iotProjectName, deviceId, creds) {
 setCredentials(
   "iotProjectFrance",
   "10",
-  JSON.stringify([{ "auth-id": "10-id", type: "psk" }])
+  JSON.stringify([
+    {
+      id: uuidv1(),
+      type: "hashed-password",
+      "auth-id": "user-1",
+      enabled: false,
+      secrets: [
+        {
+          id: uuidv1(),
+          "not-after": "2020-10-01T10:00:00Z",
+          "pwd-hash": "bjb232138d",
+          comment: "test"
+        },
+        {
+          id: uuidv1(),
+          "not-before": "2020-10-01T10:00:00Z",
+          "pwd-hash": "adfhk327823",
+          comment: "comment"
+        }
+      ]
+    }
+  ])
 );
 setCredentials(
   "iotProjectFrance",
