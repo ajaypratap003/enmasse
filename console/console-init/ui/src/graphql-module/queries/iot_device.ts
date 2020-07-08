@@ -167,11 +167,27 @@ const UPDATE_IOT_DEVICE = gql(
   }`
 );
 
+const SET_IOT_CREDENTIAL_FOR_DEVICE = gql(
+  `mutation set_iot_credential_for_device(
+    $iotproject: String!
+    $deviceId: String!
+    $jsonData: String!
+  ){
+    setCredentialsForDevice(
+      iotproject:$iotproject,
+      deviceId:$deviceId,
+      jsonData:$jsonData
+    )
+  }
+  `
+);
+
 export {
   RETURN_IOT_DEVICE_DETAIL,
   RETURN_IOT_CREDENTIALS,
   DELETE_IOT_DEVICE,
   UPDATE_IOT_DEVICE,
   RETURN_ALL_DEVICES_FOR_IOT_PROJECT,
-  DELETE_CREDENTIALS_FOR_IOT_DEVICE
+  DELETE_CREDENTIALS_FOR_IOT_DEVICE,
+  SET_IOT_CREDENTIAL_FOR_DEVICE
 };

@@ -21,19 +21,23 @@ const NotFound: React.FunctionComponent<INotFoundProps> = ({ updateState }) => {
   const history = useHistory();
 
   const handleAlertActionLink = () => {
+    updateState && updateState(false);
     history.push("/");
   };
 
   return (
     <PageSection>
-      <Alert variant="danger" title="Unexpected Error">
-        Something went wrong. Please try again! className={css(styles.alert)}
-        actionLinks=
-        {
+      <Alert
+        variant="danger"
+        title="Unexpected Error"
+        className={css(styles.alert)}
+        actionLinks={
           <AlertActionLink onClick={handleAlertActionLink}>
             Take me home
           </AlertActionLink>
         }
+      >
+        Something went wrong. Please try again!
       </Alert>
     </PageSection>
   );

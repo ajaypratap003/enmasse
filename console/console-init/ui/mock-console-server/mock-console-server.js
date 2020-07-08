@@ -2168,7 +2168,7 @@ createIotDevice("iotProjectFrance", {
     },
     status: getIotDeviceStatusSection()
   }),
-  credentials: []
+  credentials: "[]"
 });
 
 createIotDevice("iotProjectFrance", {
@@ -2179,7 +2179,7 @@ createIotDevice("iotProjectFrance", {
     ext: { ocean: "atlantic" },
     status: getIotDeviceStatusSection()
   }),
-  credentials: []
+  credentials: "[]"
 });
 
 createIotDevice("iotProjectFrance", {
@@ -2191,7 +2191,7 @@ createIotDevice("iotProjectFrance", {
     ext: { summit: "Mt Blanc" },
     status: getIotDeviceStatusSection()
   }),
-  credentials: []
+  credentials: "[]"
 });
 
 createIotDevice("iotProjectFrance", {
@@ -2203,7 +2203,7 @@ createIotDevice("iotProjectFrance", {
     ext: { site: "Notre dame" },
     status: getIotDeviceStatusSection()
   }),
-  credentials: []
+  credentials: "[]"
 });
 
 createIotDevice("iotProjectFrance", {
@@ -2214,7 +2214,7 @@ createIotDevice("iotProjectFrance", {
     ext: { author: "Jules Verne" },
     status: getIotDeviceStatusSection()
   }),
-  credentials: []
+  credentials: "[]"
 });
 
 createIotDevice("iotProjectFrance", {
@@ -2225,7 +2225,7 @@ createIotDevice("iotProjectFrance", {
     ext: { city: "Nice" },
     status: getIotDeviceStatusSection()
   }),
-  credentials: []
+  credentials: "[]"
 });
 
 createIotDevice("iotProjectFrance", {
@@ -2236,7 +2236,7 @@ createIotDevice("iotProjectFrance", {
     ext: { city: "Nice" },
     status: getIotDeviceStatusSection()
   }),
-  credentials: []
+  credentials: "[]"
 });
 
 createIotDevice("iotProjectFrance", {
@@ -2249,7 +2249,7 @@ createIotDevice("iotProjectFrance", {
     },
     status: getIotDeviceStatusSection()
   }),
-  credentials: []
+  credentials: "[]"
 });
 
 createIotDevice("iotProjectFrance", {
@@ -2262,7 +2262,7 @@ createIotDevice("iotProjectFrance", {
     },
     status: getIotDeviceStatusSection()
   }),
-  credentials: []
+  credentials: "[]"
 });
 
 createIotDevice("iotProjectFrance", {
@@ -2275,7 +2275,7 @@ createIotDevice("iotProjectFrance", {
     },
     status: getIotDeviceStatusSection()
   }),
-  credentials: []
+  credentials: "[]"
 });
 
 createIotDevice("iotProjectFrance", {
@@ -2288,7 +2288,7 @@ createIotDevice("iotProjectFrance", {
       via: []
     }
   }),
-  credentials: []
+  credentials: "[]"
 });
 
 createIotDevice("iotProjectFrance", {
@@ -2301,7 +2301,7 @@ createIotDevice("iotProjectFrance", {
       via: []
     }
   }),
-  credentials: []
+  credentials: "[]"
 });
 
 createIotDevice("iotProjectIndia", {
@@ -2329,7 +2329,7 @@ createIotDevice("iotProjectIndia", {
     },
     status: getIotDeviceStatusSection()
   }),
-  credentials: []
+  credentials: "[]"
 });
 
 createIotDevice("iotProjectIndia", {
@@ -2341,7 +2341,7 @@ createIotDevice("iotProjectIndia", {
     ext: { summit: "Kanchenjunga" },
     status: getIotDeviceStatusSection()
   }),
-  credentials: []
+  credentials: "[]"
 });
 
 function setCredentials(iotProjectName, deviceId, creds) {
