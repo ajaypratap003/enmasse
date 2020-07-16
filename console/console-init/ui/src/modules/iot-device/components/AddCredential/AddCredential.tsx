@@ -6,34 +6,69 @@
 import React, { useState, useEffect } from "react";
 import { PageSection, PageSectionVariants } from "@patternfly/react-core";
 import { CredentialList, ICredential } from "modules/iot-device/components";
-import { uniqueId, findIndexByProperty } from "utils";
+import {
+  uniqueId,
+  findIndexByProperty,
+  convertJsonToMetadataOptions
+} from "utils";
 import { CredentialsType } from "constant";
 import {
   getCredentialsFieldsInitialState,
   getFormInitialStateByProperty
 } from "modules/iot-device/utils";
+import { OperationType } from "constant";
 
 export interface IAddCredentialProps {
   id?: string;
   setCredentialList?: (credentials: ICredential[]) => void;
+  operation?: OperationType.ADD | OperationType.EDIT;
+  credentials?: ICredential[];
 }
 
 export const AddCredential: React.FC<IAddCredentialProps> = ({
   id = "add-credential",
-  setCredentialList
+  setCredentialList,
+  operation = OperationType.ADD,
+  credentials: credentialList
 }) => {
-  const [credentials, setCredentials] = useState([
-    getCredentialsFieldsInitialState()
-  ]);
-  const [type, setType] = useState<string>(CredentialsType.PASSWORD);
+  const [credentials, setCredentials] = useState(
+    credentialList || [getCredentialsFieldsInitialState()]
+  );
+  const [operationType, setOperationType] = useState(operation);
+  const defaultSelectedType =
+    operationType === OperationType.EDIT ? "" : CredentialsType.PASSWORD;
+  const [type, setType] = useState<string>(defaultSelectedType);
   const [activeCredentialFormId, setActiveCredentialFormId] = useState<string>(
     ""
   );
 
-  const setSecretsInitialFormState = () => {
+  const deserializeSecretsAndExt = (
+    credentials: ICredential[],
+    initialSecret: any
+  ) => {
     const newCredentials = [...credentials];
+    newCredentials?.map((cred: ICredential, credIndex: number) => {
+      cred?.secrets?.map((secret: any, srtIndex: number) => {
+        (newCredentials[credIndex]["secrets"] as any)[srtIndex] = {
+          ...initialSecret,
+          ...secret
+        };
+      });
+      const ext = newCredentials[credIndex]["ext"];
+      (newCredentials[credIndex]["ext"] as any) = convertJsonToMetadataOptions(
+        ext,
+        undefined,
+        true
+      );
+    });
+    return newCredentials;
+  };
+
+  const setSecretsInitialFormState = () => {
+    let newCredentials: ICredential[] = [...credentials];
     const activeFormId =
-      activeCredentialFormId || newCredentials[newCredentials.length - 1]?.id;
+      activeCredentialFormId || newCredentials[newCredentials?.length - 1]?.id;
+
     const credIndex = findIndexByProperty(credentials, "id", activeFormId);
     if (credIndex >= 0) {
       const initialState = getFormInitialStateByProperty(
@@ -41,9 +76,16 @@ export const AddCredential: React.FC<IAddCredentialProps> = ({
         "secrets",
         credIndex
       );
-      newCredentials[credIndex]["secrets"] = [
-        { id: uniqueId(), ...initialState }
-      ];
+
+      const initialStateSecret = { id: uniqueId(), ...initialState };
+      if (operationType === OperationType.EDIT) {
+        newCredentials = deserializeSecretsAndExt(
+          newCredentials,
+          initialStateSecret
+        );
+      } else if (operationType === OperationType.ADD) {
+        newCredentials[credIndex]["secrets"] = [initialStateSecret];
+      }
       setCredentials(newCredentials);
     }
   };
@@ -57,6 +99,7 @@ export const AddCredential: React.FC<IAddCredentialProps> = ({
   }, [credentials]);
 
   const onSelectType = (id: string, event: any, value: string) => {
+    setOperationType(OperationType.ADD);
     setType(value);
     setActiveCredentialFormId(id);
     handleInputChange(id, event, value);

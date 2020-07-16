@@ -6,13 +6,15 @@
 import {
   MAX_ITEM_TO_DISPLAY_IN_TYPEAHEAD_DROPDOWN,
   TypeAheadMessage,
-  SERVER_DATA_THRESHOLD
+  SERVER_DATA_THRESHOLD,
+  DeviceConnectionType
 } from "constant";
 import {
   forbiddenBackslashRegexp,
   forbiddenSingleQuoteRegexp,
   forbiddenDoubleQuoteRegexp
 } from "types/Configs";
+import { ICredential } from "modules/iot-device/components";
 
 export interface ISelectOption {
   value: string;
@@ -191,7 +193,11 @@ const getLabelForTypeOfObject = (value: any) => {
  * @param object 
  * @param type 
  */
-const convertJsonToMetadataOptions = (object: any, type?: string) => {
+const convertJsonToMetadataOptions = (
+  object: any,
+  type?: string,
+  isCaseType?: boolean
+) => {
   const keys = Object.keys(object);
   let metadataArray = [];
   for (var key of keys) {
@@ -215,9 +221,12 @@ const convertJsonToMetadataOptions = (object: any, type?: string) => {
       }
     } else {
       metadataArray.push({
+        id: uniqueId(),
         key: type && type === "array" ? "" : key,
         value: object[key],
-        type: typeof object[key],
+        type: isCaseType
+          ? getLabelForTypeOfObject(object[key])
+          : typeof object[key],
         typeLabel: getLabelForTypeOfObject(object[key])
       });
     }
@@ -323,6 +332,21 @@ const getLabelByKey = (key: string) => {
   return key;
 };
 
+const getDeviceConnectionType = (
+  viaGateway: boolean,
+  credentials: ICredential[]
+) => {
+  let connectionType: string = "";
+  if (viaGateway && !credentials?.length) {
+    connectionType = DeviceConnectionType.VIA_GATEWAYS;
+  } else if (!viaGateway && credentials?.length > 0) {
+    connectionType = DeviceConnectionType.CONNECTED_DIRECTLY;
+  } else {
+    connectionType = DeviceConnectionType.NA;
+  }
+  return connectionType;
+};
+
 export {
   getSelectOptionList,
   compareObject,
@@ -338,5 +362,6 @@ export {
   convertMetadataOptionsToJson,
   createDeepCopy,
   getFormattedJsonString,
-  getLabelByKey
+  getLabelByKey,
+  getDeviceConnectionType
 };

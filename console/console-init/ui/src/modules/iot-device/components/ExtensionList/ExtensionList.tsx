@@ -126,6 +126,7 @@ export const ExtensionList: React.FC<IExtensionListProps> = ({
                   <TextInput
                     id={`ext-list-value-textinput-${id}`}
                     name="value"
+                    value={ext["value"]}
                     onChange={(value, event) =>
                       handleInputChangeExtension(credentialId, event, value, id)
                     }
