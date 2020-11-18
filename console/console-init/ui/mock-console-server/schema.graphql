@@ -1,0 +1,10 @@
+type Topic {
+  name: String!
+  partitions: Int
+  replicas: Int
+}
+
+type Query {
+  topic(name: String): Topic
+  topics: [Topic]
+}
